@@ -1,6 +1,6 @@
 import { Dungeon } from './dungeon'
-import { Keys } from './keys'
-import { Tiles } from './tiles'
+import { keys } from './keys'
+import { tiles } from './tiles'
 
 const tileSize = 16
 
@@ -42,16 +42,16 @@ export class Level {
   update (elapsed, keysDown) {
     // handle input to move the player
     let move = { x: 0, y: 0 }
-    if (Keys.Left in keysDown) {
+    if (keys.left in keysDown) {
       move.x -= this.player.speed * elapsed
     }
-    if (Keys.Right in keysDown) {
+    if (keys.right in keysDown) {
       move.x += this.player.speed * elapsed
     }
-    if (Keys.Up in keysDown) {
+    if (keys.up in keysDown) {
       move.y -= this.player.speed * elapsed
     }
-    if (Keys.Down in keysDown) {
+    if (keys.down in keysDown) {
       move.y += this.player.speed * elapsed
     }
 
@@ -78,7 +78,7 @@ export class Level {
       let ly = cy - r.pos.y
 
       // if we're on the up stairs, return -1 to indicate we want to move up
-      if (r.tiles[ly][lx] === Tiles.StairsUp) {
+      if (r.tiles[ly][lx] === tiles.stairsUp) {
         onStairs = true
 
         if (!this.player.onStairs) {
@@ -88,7 +88,7 @@ export class Level {
       }
 
       // if we're on the down stairs, return 1 to indicate we want to move down
-      if (r.tiles[ly][lx] === Tiles.StairsDown) {
+      if (r.tiles[ly][lx] === tiles.stairsDown) {
         onStairs = true
 
         if (!this.player.onStairs) {
@@ -209,17 +209,17 @@ export class Level {
           if (tile.HasBeenSeen) {
             // choose the color by the type and whether the tile is currently visible
             switch (tile.type) {
-              case Tiles.Floor:
-              case Tiles.Door:
+              case tiles.floor:
+              case tiles.door:
                 context.fillStyle = canBeSeen ? '#B8860B' : '#705104'
                 break
-              case Tiles.Wall:
+              case tiles.wall:
                 context.fillStyle = canBeSeen ? '#8B4513' : '#61300D'
                 break
-              case Tiles.StairsDown:
+              case tiles.stairsDown:
                 context.fillStyle = '#7A5A0D'
                 break
-              case Tiles.StairsUp:
+              case tiles.stairsUp:
                 context.fillStyle = '#F2CD27'
                 break
             }
@@ -262,7 +262,7 @@ export class Level {
         // go down each of the tiles along the Y axis
         for (let y = start; y < end; y++) {
           // if there is a wall in the tile
-          if (this.collisionMap[y][x] === Tiles.Wall) {
+          if (this.collisionMap[y][x] === tiles.wall) {
             // we adjust our end position accordingly
             endPos.x = x * tileSize - offset + (move.x < 0 ? tileSize : 0)
             break
@@ -286,7 +286,7 @@ export class Level {
         // go across each of the tiles along the X axis
         for (let x = start; x < end; x++) {
           // if there is a wall in the tile
-          if (this.collisionMap[y][x] === Tiles.Wall) {
+          if (this.collisionMap[y][x] === tiles.wall) {
             // we adjust our end position accordingly
             endPos.y = y * tileSize - offset + (move.y < 0 ? tileSize : 0)
             break

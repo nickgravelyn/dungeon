@@ -1,8 +1,8 @@
-export const Tiles = Object.freeze({
-  Blank: 0,
-  Wall: 1,
-  Floor: 2,
-  Door: 3,
-  StairsUp: 4,
-  StairsDown: 5,
+export const tiles = Object.freeze({
+  blank: 0,
+  wall: 1,
+  floor: 2,
+  door: 3,
+  stairsUp: 4,
+  stairsDown: 5,
 })

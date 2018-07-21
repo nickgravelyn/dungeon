@@ -1,7 +1,7 @@
 // helper to map key values to names
-export const Keys = Object.freeze({
-  Left: 37,
-  Up: 38,
-  Right: 39,
-  Down: 40,
+export const keys = Object.freeze({
+  left: 37,
+  up: 38,
+  right: 39,
+  down: 40,
 })

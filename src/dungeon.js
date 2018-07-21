@@ -1,5 +1,5 @@
 import { Room } from './room'
-import { Tiles } from './tiles'
+import { tiles } from './tiles'
 
 function randomRange (min, max) {
   return Math.floor(Math.random() * (max - min) + min)
@@ -33,9 +33,9 @@ export class Dungeon {
       if (r.hasStairs()) {
         for (let y = 0; y < r.size.y; y++) {
           for (let x = 0; x < r.size.x; x++) {
-            if (r.tiles[y][x] === Tiles.StairsUp) {
+            if (r.tiles[y][x] === tiles.stairsUp) {
               result.up = { x: r.pos.x + x, y: r.pos.y + y }
-            } else if (r.tiles[y][x] === Tiles.StairsUp) {
+            } else if (r.tiles[y][x] === tiles.stairsUp) {
               result.down = { x: r.pos.x + x, y: r.pos.y + y }
             }
           }
@@ -87,10 +87,10 @@ export class Dungeon {
 
     // add stairs if desired
     if (this.addStairsDown) {
-      this.addStairs(Tiles.StairsDown)
+      this.addStairs(tiles.stairsDown)
     }
     if (this.addStairsUp) {
-      this.addStairs(Tiles.StairsUp)
+      this.addStairs(tiles.stairsUp)
     }
   }
 
@@ -138,13 +138,13 @@ export class Dungeon {
         for (let x = 0; x < r.size.x; x++) {
           let value = 0
           switch (r.tiles[y][x]) {
-            case Tiles.Wall:
+            case tiles.wall:
               value = 1
               break
-            case Tiles.StairsUp:
+            case tiles.stairsUp:
               value = 2
               break
-            case Tiles.StairsDown:
+            case tiles.stairsDown:
               value = 3
               break
           }
@@ -345,7 +345,7 @@ export class Dungeon {
       let y = doorPos.y - r.pos.y
 
       // set the tile to be a door
-      r.tiles[y][x] = Tiles.Door
+      r.tiles[y][x] = tiles.door
     }
   }
 
@@ -399,13 +399,13 @@ export class Dungeon {
     for (let y = 1; y < room.size.y - 2; y++) {
       for (let x = 1; x < room.size.x - 2; x++) {
         // only put stairs on the floor
-        if (room.tiles[y][x] !== Tiles.Floor) { continue }
+        if (room.tiles[y][x] !== tiles.floor) { continue }
 
         // make sure this floor isn't right next to a door
-        if (room.tiles[y - 1][x] === Tiles.Door ||
-                    room.tiles[y + 1][x] === Tiles.Door ||
-                    room.tiles[y][x - 1] === Tiles.Door ||
-                    room.tiles[y][x + 1] === Tiles.Door) { continue }
+        if (room.tiles[y - 1][x] === tiles.door ||
+                    room.tiles[y + 1][x] === tiles.door ||
+                    room.tiles[y][x - 1] === tiles.door ||
+                    room.tiles[y][x + 1] === tiles.door) { continue }
 
         // add it to the candidate list
         candidates.push({ x: x, y: y })
