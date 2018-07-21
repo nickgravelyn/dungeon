@@ -1,18 +1,24 @@
-function Dungeon (width, height) {
-  this.size = { x: width, y: height }
+import { Room } from './room'
+import { Tiles } from './tiles'
+import { rand, randomElement } from './utils'
 
-  this.minRoomSize = 5
-  this.maxRoomSize = 15
-  this.maxNumRooms = 50
-  this.maxRoomArea = 150
+export class Dungeon {
+  constructor (width, height) {
+    this.size = { x: width, y: height }
 
-  this.addStairsUp = true
-  this.addStairsDown = true
+    this.minRoomSize = 5
+    this.maxRoomSize = 15
+    this.maxNumRooms = 50
+    this.maxRoomArea = 150
 
-  this.rooms = []
-  this.roomGrid = []
+    this.addStairsUp = true
+    this.addStairsDown = true
 
-  this.getStairs = function () {
+    this.rooms = []
+    this.roomGrid = []
+  }
+
+  getStairs () {
     var result = { up: null, down: null }
     for (var i = 0; i < this.rooms.length; i++) {
       var r = this.rooms[i]
@@ -32,7 +38,7 @@ function Dungeon (width, height) {
     return result
   }
 
-  this.generate = function () {
+  generate () {
     // clear
     this.rooms = []
     this.roomGrid = Array(this.size.y)
@@ -63,7 +69,7 @@ function Dungeon (width, height) {
       var targets = this.getPotentiallyTouchingRooms(this.rooms[i])
       for (var j = 0; j < targets.length; j++) {
         // make sure the rooms aren't already connected with a door
-        if (!AreRoomsConnected(this.rooms[i], targets[j])) {
+        if (!Room.areConnected(this.rooms[i], targets[j])) {
           // 20% chance we add a door connecting the rooms
           if (Math.random() < 0.2) {
             this.addDoor(this.findNewDoorLocation(this.rooms[i], targets[j]))
@@ -81,7 +87,7 @@ function Dungeon (width, height) {
     }
   }
 
-  this.getFlattenedTiles = function () {
+  getFlattenedTiles () {
     // create the full map for the whole dungeon
     var tiles = Array(this.size.y)
     for (var y = 0; y < this.size.y; y++) {
@@ -110,7 +116,7 @@ function Dungeon (width, height) {
     return tiles
   }
 
-  this.getCollisionMap = function () {
+  getCollisionMap () {
     // create the full collision map for the whole dungeon
     var collisionMap = Array(this.size.y)
     for (var y = 0; y < this.size.y; y++) {
@@ -145,7 +151,7 @@ function Dungeon (width, height) {
     return collisionMap
   }
 
-  this.roomIntersect = function (room1, room2) {
+  roomIntersect (room1, room2) {
     var x1 = room1.pos.x
     var y1 = room1.pos.y
     var w1 = room1.size.x
@@ -165,7 +171,7 @@ function Dungeon (width, height) {
     return true
   }
 
-  this.canFitRoom = function (room) {
+  canFitRoom (room) {
     // make sure the room fits inside the dungeon
     if (room.pos.x < 0 || room.pos.x + room.size.x > this.size.x - 1) { return false }
     if (room.pos.y < 0 || room.pos.y + room.size.y > this.size.y - 1) { return false }
@@ -179,7 +185,7 @@ function Dungeon (width, height) {
     return true
   }
 
-  this.getPotentiallyTouchingRooms = function (room) {
+  getPotentiallyTouchingRooms (room) {
     var touchingRooms = []
 
     // function that checks the list of rooms at a point in our grid for any potential touching rooms
@@ -213,7 +219,7 @@ function Dungeon (width, height) {
     return touchingRooms
   }
 
-  this.findNewDoorLocation = function (room1, room2) {
+  findNewDoorLocation (room1, room2) {
     var doorPos = { x: -1, y: -1 }
 
     // figure out the direction from room1 to room2
@@ -233,7 +239,7 @@ function Dungeon (width, height) {
     switch (dir) {
       // north
       case 0:
-        doorPos.x = Math.rand(
+        doorPos.x = rand(
           Math.floor(Math.max(room2.pos.x, room1.pos.x) + 1),
           Math.floor(Math.min(room2.pos.x + room2.size.x, room1.pos.x + room1.size.x) - 1))
         doorPos.y = room2.pos.y
@@ -241,20 +247,20 @@ function Dungeon (width, height) {
       // west
       case 1:
         doorPos.x = room2.pos.x
-        doorPos.y = Math.rand(
+        doorPos.y = rand(
           Math.floor(Math.max(room2.pos.y, room1.pos.y) + 1),
           Math.floor(Math.min(room2.pos.y + room2.size.y, room1.pos.y + room1.size.y) - 1))
         break
       // east
       case 2:
         doorPos.x = room1.pos.x
-        doorPos.y = Math.rand(
+        doorPos.y = rand(
           Math.floor(Math.max(room2.pos.y, room1.pos.y) + 1),
           Math.floor(Math.min(room2.pos.y + room2.size.y, room1.pos.y + room1.size.y) - 1))
         break
       // south
       case 3:
-        doorPos.x = Math.rand(
+        doorPos.x = rand(
           Math.floor(Math.max(room2.pos.x, room1.pos.x) + 1),
           Math.floor(Math.min(room2.pos.x + room2.size.x, room1.pos.x + room1.size.x) - 1))
         doorPos.y = room1.pos.y
@@ -264,32 +270,32 @@ function Dungeon (width, height) {
     return doorPos
   }
 
-  this.findRoomAttachment = function (room) {
+  findRoomAttachment (room) {
     // pick a room, any room
-    var r = this.rooms.random()
+    var r = randomElement(this.rooms)
 
     var pos = { x: 0, y: 0 }
 
     // randomly position this room on one of the sides of the random room
-    switch (Math.rand(0, 4)) {
+    switch (rand(0, 4)) {
       // north
       case 0:
-        pos.x = Math.rand(r.pos.x - room.size.x + 3, r.pos.x + r.size.x - 2)
+        pos.x = rand(r.pos.x - room.size.x + 3, r.pos.x + r.size.x - 2)
         pos.y = r.pos.y - room.size.y + 1
         break
         // west
       case 1:
         pos.x = r.pos.x - room.size.x + 1
-        pos.y = Math.rand(r.pos.y - room.size.y + 3, r.pos.y + r.size.y - 2)
+        pos.y = rand(r.pos.y - room.size.y + 3, r.pos.y + r.size.y - 2)
         break
         // east
       case 2:
         pos.x = r.pos.x + r.size.x - 1
-        pos.y = Math.rand(r.pos.y - room.size.y + 3, r.pos.y + r.size.y - 2)
+        pos.y = rand(r.pos.y - room.size.y + 3, r.pos.y + r.size.y - 2)
         break
         // south
       case 3:
-        pos.x = Math.rand(r.pos.x - room.size.x + 3, r.pos.x + r.size.x - 2)
+        pos.x = rand(r.pos.x - room.size.x + 3, r.pos.x + r.size.x - 2)
         pos.y = r.pos.y + r.size.y - 1
         break
     }
@@ -301,7 +307,7 @@ function Dungeon (width, height) {
     }
   }
 
-  this.addRoom = function (room) {
+  addRoom (room) {
     // if the room won't fit, we don't add it
     if (!this.canFitRoom(room)) { return false }
 
@@ -321,7 +327,7 @@ function Dungeon (width, height) {
     return true
   }
 
-  this.addDoor = function (doorPos) {
+  addDoor (doorPos) {
     // get all the rooms at the location of the door
     var rooms = this.roomGrid[doorPos.y][doorPos.x]
     for (var i = 0; i < rooms.length; i++) {
@@ -336,7 +342,7 @@ function Dungeon (width, height) {
     }
   }
 
-  this.createRandomRoom = function () {
+  createRandomRoom () {
     var width = 0
     var height = 0
     var area = 0
@@ -344,8 +350,8 @@ function Dungeon (width, height) {
     // find an acceptable width and height using our min/max sizes while keeping under
     // the maximum area
     do {
-      width = Math.rand(this.minRoomSize, this.maxRoomSize)
-      height = Math.rand(this.minRoomSize, this.maxRoomSize)
+      width = rand(this.minRoomSize, this.maxRoomSize)
+      height = rand(this.minRoomSize, this.maxRoomSize)
       area = width * height
     } while (this.maxRoomArea > 0 && area > this.maxRoomArea)
 
@@ -353,7 +359,7 @@ function Dungeon (width, height) {
     return new Room(width, height)
   }
 
-  this.generateRoom = function () {
+  generateRoom () {
     // create the randomly sized room
     var room = this.createRandomRoom()
 
@@ -374,11 +380,11 @@ function Dungeon (width, height) {
     }
   }
 
-  this.addStairs = function (type) {
+  addStairs (type) {
     var room = null
 
     // keep picking random rooms until we find one that has only one door and doesn't already have stairs in it
-    do { room = this.rooms.random() }
+    do { room = randomElement(this.rooms) }
     while (room.getDoorLocations().length > 1 || room.hasStairs())
 
     // build a list of all locations in the room that qualify for stairs
@@ -400,7 +406,7 @@ function Dungeon (width, height) {
     }
 
     // pick a random candidate location and make it the stairs
-    var loc = candidates.random()
+    var loc = randomElement(candidates)
     room.tiles[loc.y][loc.x] = type
   }
 }

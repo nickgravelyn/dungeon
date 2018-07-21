@@ -1,34 +1,45 @@
-var tileSize = 16
+import { Dungeon } from './dungeon'
+import { Keys } from './keys'
+import { Tiles } from './tiles'
 
-function Level () {
-  // create a dungeon
-  this.dungeon = new Dungeon(100, 100)
-  this.dungeon.generate()
+const tileSize = 16
 
-  // the current collision map for the dungeon
-  this.collisionMap = this.dungeon.getCollisionMap()
+export class Level {
+  constructor () {
+    // create a dungeon
+    this.dungeon = new Dungeon(100, 100)
+    this.dungeon.generate()
 
-  // the tiles in the map
-  this.tiles = this.dungeon.getFlattenedTiles()
+    // the current collision map for the dungeon
+    this.collisionMap = this.dungeon.getCollisionMap()
 
-  // basic player object
-  this.player = {
-    pos: { x: 0, y: 0 },
-    size: { x: 12, y: 12 },
-    speed: 175,
-    color: '#0CED13',
-    onStairs: true,
+    // the tiles in the map
+    this.tiles = this.dungeon.getFlattenedTiles()
+
+    // basic player object
+    this.player = {
+      pos: { x: 0, y: 0 },
+      size: { x: 12, y: 12 },
+      speed: 175,
+      color: '#0CED13',
+      onStairs: true,
+    }
+
+    // place the player at the up stair case
+    var stairs = this.dungeon.getStairs()
+    this.player.pos.x = (stairs.up.x * tileSize) + tileSize / 2 - this.player.size.x / 2
+    this.player.pos.y = (stairs.up.y * tileSize) + tileSize / 2 - this.player.size.y / 2
   }
 
-  // place the player at the up stair case
-  var stairs = this.dungeon.getStairs()
-  this.player.pos.x = (stairs.up.x * tileSize) + tileSize / 2 - this.player.size.x / 2
-  this.player.pos.y = (stairs.up.y * tileSize) + tileSize / 2 - this.player.size.y / 2
+  width () {
+    return this.dungeon.size.x * tileSize
+  }
 
-  this.width = function () { return this.dungeon.size.x * tileSize }
-  this.height = function () { return this.dungeon.size.y * tileSize }
+  height () {
+    return this.dungeon.size.y * tileSize
+  }
 
-  this.update = function (elapsed, keysDown) {
+  update (elapsed, keysDown) {
     // handle input to move the player
     var move = { x: 0, y: 0 }
     if (Keys.Left in keysDown) {
@@ -96,7 +107,7 @@ function Level () {
 
   // x0/y0 === the player
   // x1/y1 === the tile
-  this.isTileVisible = function (visibility, x0, y0, x1, y1) {
+  isTileVisible (visibility, x0, y0, x1, y1) {
     // all tiles are visible if we're not doing visibility checks
     if (visibility === 'none') { return true }
 
@@ -155,7 +166,7 @@ function Level () {
     return false
   }
 
-  this.draw = function (canvas, context, camera, visibility) {
+  draw (canvas, context, camera, visibility) {
     // compute the player's center in tile space for the tile visibility checks
     var cx = Math.floor((this.player.pos.x + this.player.size.x / 2) / tileSize)
     var cy = Math.floor((this.player.pos.y + this.player.size.y / 2) / tileSize)
@@ -229,7 +240,7 @@ function Level () {
       Math.floor(this.player.size.y))
   }
 
-  this.moveEntity = function (pos, size, move) {
+  moveEntity (pos, size, move) {
     // start with the end goal position
     var endPos = {
       x: pos.x + move.x,

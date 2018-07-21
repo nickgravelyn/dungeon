@@ -1,3 +1,6 @@
+import { Level } from './level'
+import { Keys } from './keys'
+
 // array of all the levels in our game
 var levels = [new Level()]
 
@@ -126,11 +129,9 @@ function MainLoop () {
   Draw()
 }
 
-function Initialize () {
-  // hook the visibility chooser's event so we can update the level
-  var visibility = document.getElementById('visibility')
-  visibility.onchange = function () { visibilityType = visibility.options[visibility.selectedIndex].value }
+// hook the visibility chooser's event so we can update the level
+var visibility = document.getElementById('visibility')
+visibility.onchange = function () { visibilityType = visibility.options[visibility.selectedIndex].value }
 
-  // start our loop
-  window.requestAnimationFrame(MainLoop, document.getElementById('myCanvas'))
-}
+// start our loop
+window.requestAnimationFrame(MainLoop, document.getElementById('myCanvas'))

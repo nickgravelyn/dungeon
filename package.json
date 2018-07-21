@@ -8,9 +8,12 @@
   "private": true,
   "devDependencies": {
     "@nickgravelyn/eslint-config": "^1.1.0",
-    "eslint": "^5.2.0"
+    "eslint": "^5.2.0",
+    "parcel-bundler": "^1.9.7"
   },
   "scripts": {
+    "build": "parcel build src/index.html",
+    "watch": "parcel src/index.html",
     "lint": "eslint ."
   }
 }
