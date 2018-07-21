@@ -35,22 +35,34 @@ window.addEventListener(
 
 let levels = [new Level()]
 let currentLevel = 0
-let camera = { x: 0, y: 0 }
 let visibilityType = 'room'
 let takeScreenshot = false
 
 document.getElementById('resetBtn').addEventListener('click', () => {
   levels = [new Level()]
   currentLevel = 0
-  camera = { x: 0, y: 0 }
 })
 
 document.getElementById('screenshotBtn').addEventListener('click', () => {
   takeScreenshot = true
 })
 
-function update (elapsed) {
-  const change = levels[currentLevel].update(elapsed, keysDown)
+const visibilitySelector = document.getElementById('visibility')
+visibilitySelector.onchange = () => {
+  visibilityType = visibilitySelector.options[visibilitySelector.selectedIndex].value
+}
+
+let prevTime
+function tick (timestamp) {
+  window.requestAnimationFrame(tick)
+
+  if (!prevTime) {
+    prevTime = timestamp
+  }
+  const delta = (timestamp - prevTime) / 1000.0
+  prevTime = timestamp
+
+  const change = levels[currentLevel].update(delta, keysDown)
 
   if (change === -1) {
     if (currentLevel > 0) {
@@ -68,12 +80,10 @@ function update (elapsed) {
   const player = levels[currentLevel].player
   const cx = player.pos.x + player.size.x / 2
   const cy = player.pos.y + player.size.y / 2
-  camera.x = floor(cx - canvas.width / 2)
-  camera.y = floor(cy - canvas.height / 2)
-}
-
-function draw () {
-  const canvas = document.getElementById('myCanvas')
+  const camera = {
+    x: floor(cx - canvas.width / 2),
+    y: floor(cy - canvas.height / 2),
+  }
 
   const context = canvas.getContext('2d')
   context.fillStyle = 'black'
@@ -86,22 +96,4 @@ function draw () {
     takeScreenshot = false
   }
 }
-
-let prevTime = Date.now()
-function tick () {
-  window.requestAnimationFrame(tick)
-
-  const time = Date.now()
-  const delta = (time - prevTime) / 1000.0
-  prevTime = time
-
-  update(delta)
-  draw()
-}
-
-const visibilitySelector = document.getElementById('visibility')
-visibilitySelector.onchange = () => {
-  visibilityType = visibilitySelector.options[visibilitySelector.selectedIndex].value
-}
-
 window.requestAnimationFrame(tick)
