@@ -26,7 +26,7 @@ export class Level {
     }
 
     // place the player at the up stair case
-    var stairs = this.dungeon.getStairs()
+    let stairs = this.dungeon.getStairs()
     this.player.pos.x = (stairs.up.x * tileSize) + tileSize / 2 - this.player.size.x / 2
     this.player.pos.y = (stairs.up.y * tileSize) + tileSize / 2 - this.player.size.y / 2
   }
@@ -41,7 +41,7 @@ export class Level {
 
   update (elapsed, keysDown) {
     // handle input to move the player
-    var move = { x: 0, y: 0 }
+    let move = { x: 0, y: 0 }
     if (Keys.Left in keysDown) {
       move.x -= this.player.speed * elapsed
     }
@@ -59,23 +59,23 @@ export class Level {
     this.player.pos = this.moveEntity(this.player.pos, this.player.size, move)
 
     // compute the player's center
-    var cx = Math.floor((this.player.pos.x + this.player.size.x / 2) / tileSize)
-    var cy = Math.floor((this.player.pos.y + this.player.size.y / 2) / tileSize)
+    let cx = Math.floor((this.player.pos.x + this.player.size.x / 2) / tileSize)
+    let cy = Math.floor((this.player.pos.y + this.player.size.y / 2) / tileSize)
 
     // the return value for the destination. -1 means go up a floor, 1 means go down a floor
-    var dest = 0
+    let dest = 0
 
     // tracks if the player is on stairs this frame
-    var onStairs = false
+    let onStairs = false
 
     // grab the new current list of rooms
-    var rooms = this.dungeon.roomGrid[cy][cx]
-    for (var i = 0; i < rooms.length; i++) {
-      var r = rooms[i]
+    let rooms = this.dungeon.roomGrid[cy][cx]
+    for (let i = 0; i < rooms.length; i++) {
+      let r = rooms[i]
 
       // get the player's center in room coordinates
-      var lx = cx - r.pos.x
-      var ly = cy - r.pos.y
+      let lx = cx - r.pos.x
+      let ly = cy - r.pos.y
 
       // if we're on the up stairs, return -1 to indicate we want to move up
       if (r.tiles[ly][lx] === Tiles.StairsUp) {
@@ -113,10 +113,10 @@ export class Level {
 
     // for room mode, just check that we're in the same room as the tile
     if (visibility === 'room') {
-      var rooms = this.dungeon.roomGrid[y0][x0]
+      let rooms = this.dungeon.roomGrid[y0][x0]
       if (rooms !== null) {
-        for (var i = 0; i < rooms.length; i++) {
-          var r = rooms[i]
+        for (let i = 0; i < rooms.length; i++) {
+          let r = rooms[i]
           if (x1 >= r.pos.x && x1 < r.pos.x + r.size.x && y1 >= r.pos.y && y1 < r.pos.y + r.size.y) {
             return true
           }
@@ -133,13 +133,13 @@ export class Level {
       }
 
       // get the deltas and steps for both axis
-      var dx = Math.abs(x1 - x0)
-      var dy = Math.abs(y1 - y0)
-      var sx = x0 < x1 ? 1 : -1
-      var sy = y0 < y1 ? 1 : -1
+      let dx = Math.abs(x1 - x0)
+      let dy = Math.abs(y1 - y0)
+      let sx = x0 < x1 ? 1 : -1
+      let sy = y0 < y1 ? 1 : -1
 
       // stores an error factor we use to change the axis coordinates
-      var err = dx - dy
+      let err = dx - dy
 
       while (x0 !== x1 || y0 !== y1) {
         // check our collision map to see if this tile blocks visibility
@@ -147,7 +147,7 @@ export class Level {
 
         // check our error value against our deltas to see if
         // we need to move to a new point on either axis
-        var e2 = 2 * err
+        let e2 = 2 * err
         if (e2 > -dy) {
           err -= dy
           x0 += sx
@@ -168,39 +168,39 @@ export class Level {
 
   draw (canvas, context, camera, visibility) {
     // compute the player's center in tile space for the tile visibility checks
-    var cx = Math.floor((this.player.pos.x + this.player.size.x / 2) / tileSize)
-    var cy = Math.floor((this.player.pos.y + this.player.size.y / 2) / tileSize)
+    let cx = Math.floor((this.player.pos.x + this.player.size.x / 2) / tileSize)
+    let cy = Math.floor((this.player.pos.y + this.player.size.y / 2) / tileSize)
 
     // calculate the base tile coordinates using the camera
-    var baseTileX = Math.floor(camera.x / tileSize) - 1
-    var baseTileY = Math.floor(camera.y / tileSize) - 1
+    let baseTileX = Math.floor(camera.x / tileSize) - 1
+    let baseTileY = Math.floor(camera.y / tileSize) - 1
 
     // calculating the pixel offset based on the camera
     // following http://javascript.about.com/od/problemsolving/a/modulobug.htm to fix negative camera values
-    var pixelOffsetX = ((camera.x % tileSize) + tileSize) % tileSize
-    var pixelOffsetY = ((camera.y % tileSize) + tileSize) % tileSize
+    let pixelOffsetX = ((camera.x % tileSize) + tileSize) % tileSize
+    let pixelOffsetY = ((camera.y % tileSize) + tileSize) % tileSize
 
     // calculate the min and max X/Y values
-    var pixelMinX = -pixelOffsetX - tileSize
-    var pixelMinY = -pixelOffsetY - tileSize
-    var pixelMaxX = canvas.width + tileSize - pixelOffsetX
-    var pixelMaxY = canvas.height + tileSize - pixelOffsetY
+    let pixelMinX = -pixelOffsetX - tileSize
+    let pixelMinY = -pixelOffsetY - tileSize
+    let pixelMaxX = canvas.width + tileSize - pixelOffsetX
+    let pixelMaxY = canvas.height + tileSize - pixelOffsetY
 
     // loop over each row, using both tile coordinates and pixel coordinates
-    for (var tileY = baseTileY, y = pixelMinY; y < pixelMaxY; tileY++, y += tileSize) {
+    for (let tileY = baseTileY, y = pixelMinY; y < pixelMaxY; tileY++, y += tileSize) {
       // verify this row is actually inside the dungeon
       if (tileY < 0 || tileY >= this.dungeon.size.y) { continue }
 
       // loop over each column, using both tile coordinates and pixel coordinates
-      for (var tileX = baseTileX, x = pixelMinX; x < pixelMaxX; tileX++, x += tileSize) {
+      for (let tileX = baseTileX, x = pixelMinX; x < pixelMaxX; tileX++, x += tileSize) {
         // verify this column is actually inside the dungeon
         if (tileX < 0 || tileX >= this.dungeon.size.x) { continue }
 
         // get the current tile and make sure it's valid
-        var tile = this.tiles[tileY][tileX]
+        let tile = this.tiles[tileY][tileX]
         if (tile !== null) {
           // test if the tile is visible
-          var canBeSeen = this.isTileVisible(visibility, cx, cy, tileX, tileY)
+          let canBeSeen = this.isTileVisible(visibility, cx, cy, tileX, tileY)
 
           // make sure the tile stores a record if it's ever been seen
           if (canBeSeen) { tile.HasBeenSeen = true }
@@ -242,7 +242,7 @@ export class Level {
 
   moveEntity (pos, size, move) {
     // start with the end goal position
-    var endPos = {
+    let endPos = {
       x: pos.x + move.x,
       y: pos.y + move.y,
     }
@@ -250,17 +250,17 @@ export class Level {
     // check X axis motion for collisions
     if (move.x) {
       // calculate the X tile coordinate where we'd like to be
-      var offset = (move.x > 0 ? size.x : 0)
-      var x = Math.floor((pos.x + move.x + offset) / tileSize)
+      let offset = (move.x > 0 ? size.x : 0)
+      let x = Math.floor((pos.x + move.x + offset) / tileSize)
 
       // figure out the range of Y tile coordinates that we can collide with
-      var start = Math.floor(pos.y / tileSize)
-      var end = Math.ceil((pos.y + size.y) / tileSize)
+      let start = Math.floor(pos.y / tileSize)
+      let end = Math.ceil((pos.y + size.y) / tileSize)
 
       // determine whether these tiles are all inside the map
       if (end >= 0 && start < this.dungeon.size.y && x >= 0 && x < this.dungeon.size.x) {
         // go down each of the tiles along the Y axis
-        for (var y = start; y < end; y++) {
+        for (let y = start; y < end; y++) {
           // if there is a wall in the tile
           if (this.collisionMap[y][x] === Tiles.Wall) {
             // we adjust our end position accordingly
@@ -274,17 +274,17 @@ export class Level {
     // then check Y axis motion for collisions
     if (move.y) {
       // calculate the X tile coordinate where we'd like to be
-      var offset = (move.y > 0 ? size.y : 0)
-      var y = Math.floor((pos.y + move.y + offset) / tileSize)
+      let offset = (move.y > 0 ? size.y : 0)
+      let y = Math.floor((pos.y + move.y + offset) / tileSize)
 
       // figure out the range of X tile coordinates that we can collide with
-      var start = Math.floor(endPos.x / tileSize)
-      var end = Math.ceil((endPos.x + size.x) / tileSize)
+      let start = Math.floor(endPos.x / tileSize)
+      let end = Math.ceil((endPos.x + size.x) / tileSize)
 
       // determine whether these tiles are all inside the map
       if (end >= 0 && start < this.dungeon.size.x && y >= 0 && y < this.dungeon.size.y) {
         // go across each of the tiles along the X axis
-        for (var x = start; x < end; x++) {
+        for (let x = start; x < end; x++) {
           // if there is a wall in the tile
           if (this.collisionMap[y][x] === Tiles.Wall) {
             // we adjust our end position accordingly

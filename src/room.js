@@ -7,9 +7,9 @@ export class Room {
     this.tiles = []
 
     // surround the room with walls, and fill the rest with floors.
-    for (var y = 0; y < this.size.y; y++) {
-      var row = []
-      for (var x = 0; x < this.size.x; x++) {
+    for (let y = 0; y < this.size.y; y++) {
+      let row = []
+      for (let x = 0; x < this.size.x; x++) {
         if (y === 0 || y === this.size.y - 1 || x === 0 || x === this.size.x - 1) {
           row.push(Tiles.Wall)
         } else {
@@ -22,8 +22,8 @@ export class Room {
 
   hasStairs () {
     // find out if we have any stair tiles in the room
-    for (var y = 0; y < this.size.y; y++) {
-      for (var x = 0; x < this.size.x; x++) {
+    for (let y = 0; y < this.size.y; y++) {
+      for (let x = 0; x < this.size.x; x++) {
         if (this.tiles[y][x] === Tiles.StairsDown || this.tiles[y][x] === Tiles.StairsUp) {
           return true
         }
@@ -33,11 +33,11 @@ export class Room {
   }
 
   getDoorLocations () {
-    var doors = []
+    let doors = []
 
     // find all the doors and add their positions to the list
-    for (var y = 0; y < this.size.y; y++) {
-      for (var x = 0; x < this.size.x; x++) {
+    for (let y = 0; y < this.size.y; y++) {
+      for (let x = 0; x < this.size.x; x++) {
         if (this.tiles[y][x] === Tiles.Door) {
           doors.push({ x: x, y: y })
         }
@@ -49,9 +49,9 @@ export class Room {
 
   static areConnected (room1, room2) {
     // iterate the doors in room1 and see if any are also a door in room2
-    var doors = room1.getDoorLocations()
-    for (var i = 0; i < doors.length; i++) {
-      var d = doors[i]
+    let doors = room1.getDoorLocations()
+    for (let i = 0; i < doors.length; i++) {
+      let d = doors[i]
 
       // move the door into "world space" using room1's position
       d.x += room1.pos.x

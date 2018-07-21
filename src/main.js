@@ -2,20 +2,20 @@ import { Level } from './level'
 import { Keys } from './keys'
 
 // array of all the levels in our game
-var levels = [new Level()]
+let levels = [new Level()]
 
 // the current level index into our levels array
-var currentLevel = 0
+let currentLevel = 0
 
 // basic camera object
-var camera = { x: 0, y: 0 }
+let camera = { x: 0, y: 0 }
 
 // handle keyboard controls
-var keysDown = { }
+let keysDown = { }
 window.addEventListener(
   'keydown',
   function (e) {
-    for (var k in Keys) {
+    for (let k in Keys) {
       if (Keys[k] === e.keyCode) {
         keysDown[e.keyCode] = true
         if (e.preventDefault) { e.preventDefault() }
@@ -27,7 +27,7 @@ window.addEventListener(
 window.addEventListener(
   'keyup',
   function (e) {
-    for (var k in Keys) {
+    for (let k in Keys) {
       if (Keys[k] === e.keyCode) {
         delete keysDown[e.keyCode]
         if (e.preventDefault) { e.preventDefault() }
@@ -38,10 +38,10 @@ window.addEventListener(
   false)
 
 // the visibility type
-var visibilityType = 'room'
+let visibilityType = 'room'
 
 // flag for taking screenshots
-var takeScreenshot = false
+let takeScreenshot = false
 
 // ensure we have requestAnimationFrame available for us
 if (!window.requestAnimationFrame) {
@@ -55,20 +55,20 @@ if (!window.requestAnimationFrame) {
   })()
 }
 
-function ResetGame () {
+document.getElementById('resetBtn').addEventListener('click', () => {
   levels = [new Level()]
   currentLevel = 0
   camera = { x: 0, y: 0 }
   keysDown = { }
-}
+})
 
-function Screenshot () {
+document.getElementById('screenshotBtn').addEventListener('click', () => {
   takeScreenshot = true
-}
+})
 
-function Update (elapsed) {
+function update (elapsed) {
   // update the level
-  var change = levels[currentLevel].update(elapsed, keysDown)
+  let change = levels[currentLevel].update(elapsed, keysDown)
 
   // handle moving up and down floors
   if (change === -1) {
@@ -85,20 +85,20 @@ function Update (elapsed) {
   }
 
   // compute the camera position using the player's center
-  var canvas = document.getElementById('myCanvas')
-  var player = levels[currentLevel].player
-  var cx = player.pos.x + player.size.x / 2
-  var cy = player.pos.y + player.size.y / 2
+  let canvas = document.getElementById('myCanvas')
+  let player = levels[currentLevel].player
+  let cx = player.pos.x + player.size.x / 2
+  let cy = player.pos.y + player.size.y / 2
   camera.x = Math.floor(cx - canvas.width / 2)
   camera.y = Math.floor(cy - canvas.height / 2)
 }
 
-function Draw () {
+function draw () {
   // get the canvas
-  var canvas = document.getElementById('myCanvas')
+  let canvas = document.getElementById('myCanvas')
 
   // grab the context and draw the background color
-  var context = canvas.getContext('2d')
+  let context = canvas.getContext('2d')
   context.fillStyle = 'black'
   context.fillRect(0, 0, canvas.width, canvas.height)
 
@@ -112,26 +112,28 @@ function Draw () {
   }
 }
 
-var prevTime = Date.now()
-function MainLoop () {
+let prevTime = Date.now()
+function tick () {
   // request an update for the next frame
-  window.requestAnimationFrame(MainLoop, document.getElementById('myCanvas'))
+  window.requestAnimationFrame(tick)
 
   // compute our elapsed time
-  var time = Date.now()
-  var delta = (time - prevTime) / 1000.0
+  let time = Date.now()
+  let delta = (time - prevTime) / 1000.0
   prevTime = time
 
   // update the game
-  Update(delta)
+  update(delta)
 
   // draw the game
-  Draw()
+  draw()
 }
 
 // hook the visibility chooser's event so we can update the level
-var visibility = document.getElementById('visibility')
-visibility.onchange = function () { visibilityType = visibility.options[visibility.selectedIndex].value }
+let visibility = document.getElementById('visibility')
+visibility.onchange = () => {
+  visibilityType = visibility.options[visibility.selectedIndex].value
+}
 
 // start our loop
-window.requestAnimationFrame(MainLoop, document.getElementById('myCanvas'))
+window.requestAnimationFrame(tick)

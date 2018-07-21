@@ -19,13 +19,13 @@ export class Dungeon {
   }
 
   getStairs () {
-    var result = { up: null, down: null }
-    for (var i = 0; i < this.rooms.length; i++) {
-      var r = this.rooms[i]
+    let result = { up: null, down: null }
+    for (let i = 0; i < this.rooms.length; i++) {
+      let r = this.rooms[i]
 
       if (r.hasStairs()) {
-        for (var y = 0; y < r.size.y; y++) {
-          for (var x = 0; x < r.size.x; x++) {
+        for (let y = 0; y < r.size.y; y++) {
+          for (let x = 0; x < r.size.x; x++) {
             if (r.tiles[y][x] === Tiles.StairsUp) {
               result.up = { x: r.pos.x + x, y: r.pos.y + y }
             } else if (r.tiles[y][x] === Tiles.StairsUp) {
@@ -42,14 +42,14 @@ export class Dungeon {
     // clear
     this.rooms = []
     this.roomGrid = Array(this.size.y)
-    for (var y = 0; y < this.size.y; y++) {
-      var row = Array(this.size.x)
-      for (var x = 0; x < this.size.x; x++) { row[x] = [] }
+    for (let y = 0; y < this.size.y; y++) {
+      let row = Array(this.size.x)
+      for (let x = 0; x < this.size.x; x++) { row[x] = [] }
       this.roomGrid[y] = row
     }
 
     // seed the map with a starting randomly sized room in the center of the map
-    var room = this.createRandomRoom()
+    let room = this.createRandomRoom()
     room.pos = {
       x: Math.floor(this.size.x / 2) - Math.floor(room.size.x / 2),
       y: Math.floor(this.size.y / 2) - Math.floor(room.size.y / 2),
@@ -58,16 +58,16 @@ export class Dungeon {
 
     // continue generating rooms until we hit our cap or have hit our maximum iterations (generally
     // due to not being able to fit any more rooms in the map)
-    var iter = this.maxNumRooms * 5
+    let iter = this.maxNumRooms * 5
     while ((this.maxNumRooms <= 0 || this.rooms.length < this.maxNumRooms) && iter-- > 0) {
       this.generateRoom()
     }
 
     // now we want to randomly add doors between some of the rooms and other rooms they touch
-    for (var i = 0; i < this.rooms.length; i++) {
+    for (let i = 0; i < this.rooms.length; i++) {
       // find all rooms that we could connect with this one
-      var targets = this.getPotentiallyTouchingRooms(this.rooms[i])
-      for (var j = 0; j < targets.length; j++) {
+      let targets = this.getPotentiallyTouchingRooms(this.rooms[i])
+      for (let j = 0; j < targets.length; j++) {
         // make sure the rooms aren't already connected with a door
         if (!Room.areConnected(this.rooms[i], targets[j])) {
           // 20% chance we add a door connecting the rooms
@@ -89,17 +89,17 @@ export class Dungeon {
 
   getFlattenedTiles () {
     // create the full map for the whole dungeon
-    var tiles = Array(this.size.y)
-    for (var y = 0; y < this.size.y; y++) {
+    let tiles = Array(this.size.y)
+    for (let y = 0; y < this.size.y; y++) {
       tiles[y] = Array(this.size.x)
-      for (var x = 0; x < this.size.x; x++) { tiles[y][x] = null }
+      for (let x = 0; x < this.size.x; x++) { tiles[y][x] = null }
     }
 
     // fill in the map with details from each room
-    for (var i = 0; i < this.rooms.length; i++) {
-      var r = this.rooms[i]
-      for (var y = 0; y < r.size.y; y++) {
-        for (var x = 0; x < r.size.x; x++) {
+    for (let i = 0; i < this.rooms.length; i++) {
+      let r = this.rooms[i]
+      for (let y = 0; y < r.size.y; y++) {
+        for (let x = 0; x < r.size.x; x++) {
           // no need to make objects for blank tiles
           if (r.tiles[y][x] !== 0) {
             // the tiles we give back are objects with some extra data
@@ -118,18 +118,18 @@ export class Dungeon {
 
   getCollisionMap () {
     // create the full collision map for the whole dungeon
-    var collisionMap = Array(this.size.y)
-    for (var y = 0; y < this.size.y; y++) {
+    let collisionMap = Array(this.size.y)
+    for (let y = 0; y < this.size.y; y++) {
       collisionMap[y] = Array(this.size.x)
-      for (var x = 0; x < this.size.x; x++) { collisionMap[y][x] = 0 }
+      for (let x = 0; x < this.size.x; x++) { collisionMap[y][x] = 0 }
     }
 
     // fill in the collision map with details from each room
-    for (var i = 0; i < this.rooms.length; i++) {
-      var r = this.rooms[i]
-      for (var y = 0; y < r.size.y; y++) {
-        for (var x = 0; x < r.size.x; x++) {
-          var value = 0
+    for (let i = 0; i < this.rooms.length; i++) {
+      let r = this.rooms[i]
+      for (let y = 0; y < r.size.y; y++) {
+        for (let x = 0; x < r.size.x; x++) {
+          let value = 0
           switch (r.tiles[y][x]) {
             case Tiles.Wall:
               value = 1
@@ -152,15 +152,15 @@ export class Dungeon {
   }
 
   roomIntersect (room1, room2) {
-    var x1 = room1.pos.x
-    var y1 = room1.pos.y
-    var w1 = room1.size.x
-    var h1 = room1.size.y
+    let x1 = room1.pos.x
+    let y1 = room1.pos.y
+    let w1 = room1.size.x
+    let h1 = room1.size.y
 
-    var x2 = room2.pos.x
-    var y2 = room2.pos.y
-    var w2 = room2.size.x
-    var h2 = room2.size.y
+    let x2 = room2.pos.x
+    let y2 = room2.pos.y
+    let w2 = room2.size.x
+    let h2 = room2.size.y
 
     // the +1/-1 here are to allow the rooms one tile of overlap. this is to allow the rooms to share walls
     // instead of always ending up with two walls between the rooms
@@ -177,8 +177,8 @@ export class Dungeon {
     if (room.pos.y < 0 || room.pos.y + room.size.y > this.size.y - 1) { return false }
 
     // make sure this room doesn't intersect any existing rooms
-    for (var i = 0; i < this.rooms.length; i++) {
-      var r = this.rooms[i]
+    for (let i = 0; i < this.rooms.length; i++) {
+      let r = this.rooms[i]
       if (this.roomIntersect(room, r)) { return false }
     }
 
@@ -186,17 +186,17 @@ export class Dungeon {
   }
 
   getPotentiallyTouchingRooms (room) {
-    var touchingRooms = []
+    let touchingRooms = []
 
     // function that checks the list of rooms at a point in our grid for any potential touching rooms
-    var checkRoomList = function (x, y, rg) {
-      var r = rg[y][x]
-      for (var i = 0; i < r.length; i++) {
+    let checkRoomList = function (x, y, rg) {
+      let r = rg[y][x]
+      for (let i = 0; i < r.length; i++) {
         // make sure this room isn't the one we're searching around and that it isn't already in the list
         if (r[i] !== room && touchingRooms.indexOf(r[i]) < 0) {
           // make sure this isn't a corner of the room (doors can't go into corners)
-          var lx = x - r[i].pos.x
-          var ly = y - r[i].pos.y
+          let lx = x - r[i].pos.x
+          let ly = y - r[i].pos.y
           if ((lx > 0 && lx < r[i].size.x - 1) || (ly > 0 && ly < r[i].size.y - 1)) {
             touchingRooms.push(r[i])
           }
@@ -205,13 +205,13 @@ export class Dungeon {
     }
 
     // iterate the north and south walls, looking for other rooms in those tile locations
-    for (var x = room.pos.x + 1; x < room.pos.x + room.size.x - 1; x++) {
+    for (let x = room.pos.x + 1; x < room.pos.x + room.size.x - 1; x++) {
       checkRoomList(x, room.pos.y, this.roomGrid)
       checkRoomList(x, room.pos.y + room.size.y - 1, this.roomGrid)
     }
 
     // iterate the west and east walls, looking for other rooms in those tile locations
-    for (var y = room.pos.y + 1; y < room.pos.y + room.size.y - 1; y++) {
+    for (let y = room.pos.y + 1; y < room.pos.y + room.size.y - 1; y++) {
       checkRoomList(room.pos.x, y, this.roomGrid)
       checkRoomList(room.pos.x + room.size.x - 1, y, this.roomGrid)
     }
@@ -220,10 +220,10 @@ export class Dungeon {
   }
 
   findNewDoorLocation (room1, room2) {
-    var doorPos = { x: -1, y: -1 }
+    let doorPos = { x: -1, y: -1 }
 
     // figure out the direction from room1 to room2
-    var dir = -1
+    let dir = -1
 
     if (room1.pos.y === room2.pos.y - room1.size.y + 1) {
       dir = 0
@@ -272,9 +272,9 @@ export class Dungeon {
 
   findRoomAttachment (room) {
     // pick a room, any room
-    var r = randomElement(this.rooms)
+    let r = randomElement(this.rooms)
 
-    var pos = { x: 0, y: 0 }
+    let pos = { x: 0, y: 0 }
 
     // randomly position this room on one of the sides of the random room
     switch (rand(0, 4)) {
@@ -316,9 +316,9 @@ export class Dungeon {
 
     // update all tiles to indicate that this room is sitting on them. this grid is used
     // when placing doors so all rooms in a space can be updated at the same time.
-    for (var y = room.pos.y; y < room.pos.y + room.size.y; y++) {
-      for (var x = room.pos.x; x < room.pos.x + room.size.x; x++) {
-        var list = this.roomGrid[y][x]
+    for (let y = room.pos.y; y < room.pos.y + room.size.y; y++) {
+      for (let x = room.pos.x; x < room.pos.x + room.size.x; x++) {
+        let list = this.roomGrid[y][x]
         list.push(room)
         this.roomGrid[y][x] = list
       }
@@ -329,13 +329,13 @@ export class Dungeon {
 
   addDoor (doorPos) {
     // get all the rooms at the location of the door
-    var rooms = this.roomGrid[doorPos.y][doorPos.x]
-    for (var i = 0; i < rooms.length; i++) {
-      var r = rooms[i]
+    let rooms = this.roomGrid[doorPos.y][doorPos.x]
+    for (let i = 0; i < rooms.length; i++) {
+      let r = rooms[i]
 
       // convert the door position from world space to room space
-      var x = doorPos.x - r.pos.x
-      var y = doorPos.y - r.pos.y
+      let x = doorPos.x - r.pos.x
+      let y = doorPos.y - r.pos.y
 
       // set the tile to be a door
       r.tiles[y][x] = Tiles.Door
@@ -343,9 +343,9 @@ export class Dungeon {
   }
 
   createRandomRoom () {
-    var width = 0
-    var height = 0
-    var area = 0
+    let width = 0
+    let height = 0
+    let area = 0
 
     // find an acceptable width and height using our min/max sizes while keeping under
     // the maximum area
@@ -361,13 +361,13 @@ export class Dungeon {
 
   generateRoom () {
     // create the randomly sized room
-    var room = this.createRandomRoom()
+    let room = this.createRandomRoom()
 
     // only allow 150 tries at placing the room
-    var iter = 150
+    let iter = 150
     while (iter-- > 0) {
       // attempt to find another room to attach this one to
-      var result = this.findRoomAttachment(room)
+      let result = this.findRoomAttachment(room)
 
       // update the position of this room
       room.pos = result.position
@@ -381,16 +381,16 @@ export class Dungeon {
   }
 
   addStairs (type) {
-    var room = null
+    let room = null
 
     // keep picking random rooms until we find one that has only one door and doesn't already have stairs in it
     do { room = randomElement(this.rooms) }
     while (room.getDoorLocations().length > 1 || room.hasStairs())
 
     // build a list of all locations in the room that qualify for stairs
-    var candidates = []
-    for (var y = 1; y < room.size.y - 2; y++) {
-      for (var x = 1; x < room.size.x - 2; x++) {
+    let candidates = []
+    for (let y = 1; y < room.size.y - 2; y++) {
+      for (let x = 1; x < room.size.x - 2; x++) {
         // only put stairs on the floor
         if (room.tiles[y][x] !== Tiles.Floor) { continue }
 
@@ -406,7 +406,7 @@ export class Dungeon {
     }
 
     // pick a random candidate location and make it the stairs
-    var loc = randomElement(candidates)
+    let loc = randomElement(candidates)
     room.tiles[loc.y][loc.x] = type
   }
 }
