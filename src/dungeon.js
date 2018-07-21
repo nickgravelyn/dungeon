@@ -1,6 +1,13 @@
 import { Room } from './room'
 import { Tiles } from './tiles'
-import { rand, randomElement } from './utils'
+
+function randomRange (min, max) {
+  return Math.floor(Math.random() * (max - min) + min)
+}
+
+function randomElement (array) {
+  return array[Math.floor(Math.random() * array.length)]
+}
 
 export class Dungeon {
   constructor (width, height) {
@@ -239,7 +246,7 @@ export class Dungeon {
     switch (dir) {
       // north
       case 0:
-        doorPos.x = rand(
+        doorPos.x = randomRange(
           Math.floor(Math.max(room2.pos.x, room1.pos.x) + 1),
           Math.floor(Math.min(room2.pos.x + room2.size.x, room1.pos.x + room1.size.x) - 1))
         doorPos.y = room2.pos.y
@@ -247,20 +254,20 @@ export class Dungeon {
       // west
       case 1:
         doorPos.x = room2.pos.x
-        doorPos.y = rand(
+        doorPos.y = randomRange(
           Math.floor(Math.max(room2.pos.y, room1.pos.y) + 1),
           Math.floor(Math.min(room2.pos.y + room2.size.y, room1.pos.y + room1.size.y) - 1))
         break
       // east
       case 2:
         doorPos.x = room1.pos.x
-        doorPos.y = rand(
+        doorPos.y = randomRange(
           Math.floor(Math.max(room2.pos.y, room1.pos.y) + 1),
           Math.floor(Math.min(room2.pos.y + room2.size.y, room1.pos.y + room1.size.y) - 1))
         break
       // south
       case 3:
-        doorPos.x = rand(
+        doorPos.x = randomRange(
           Math.floor(Math.max(room2.pos.x, room1.pos.x) + 1),
           Math.floor(Math.min(room2.pos.x + room2.size.x, room1.pos.x + room1.size.x) - 1))
         doorPos.y = room1.pos.y
@@ -277,25 +284,25 @@ export class Dungeon {
     let pos = { x: 0, y: 0 }
 
     // randomly position this room on one of the sides of the random room
-    switch (rand(0, 4)) {
+    switch (randomRange(0, 4)) {
       // north
       case 0:
-        pos.x = rand(r.pos.x - room.size.x + 3, r.pos.x + r.size.x - 2)
+        pos.x = randomRange(r.pos.x - room.size.x + 3, r.pos.x + r.size.x - 2)
         pos.y = r.pos.y - room.size.y + 1
         break
         // west
       case 1:
         pos.x = r.pos.x - room.size.x + 1
-        pos.y = rand(r.pos.y - room.size.y + 3, r.pos.y + r.size.y - 2)
+        pos.y = randomRange(r.pos.y - room.size.y + 3, r.pos.y + r.size.y - 2)
         break
         // east
       case 2:
         pos.x = r.pos.x + r.size.x - 1
-        pos.y = rand(r.pos.y - room.size.y + 3, r.pos.y + r.size.y - 2)
+        pos.y = randomRange(r.pos.y - room.size.y + 3, r.pos.y + r.size.y - 2)
         break
         // south
       case 3:
-        pos.x = rand(r.pos.x - room.size.x + 3, r.pos.x + r.size.x - 2)
+        pos.x = randomRange(r.pos.x - room.size.x + 3, r.pos.x + r.size.x - 2)
         pos.y = r.pos.y + r.size.y - 1
         break
     }
@@ -350,8 +357,8 @@ export class Dungeon {
     // find an acceptable width and height using our min/max sizes while keeping under
     // the maximum area
     do {
-      width = rand(this.minRoomSize, this.maxRoomSize)
-      height = rand(this.minRoomSize, this.maxRoomSize)
+      width = randomRange(this.minRoomSize, this.maxRoomSize)
+      height = randomRange(this.minRoomSize, this.maxRoomSize)
       area = width * height
     } while (this.maxRoomArea > 0 && area > this.maxRoomArea)
 

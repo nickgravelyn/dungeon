@@ -15,10 +15,9 @@
     "parcel-bundler": "^1.9.7"
   },
   "scripts": {
-    "build": "parcel build src/index.html",
     "watch": "parcel src/index.html",
     "lint": "eslint .",
-    "gh-pages": "rm -rf ./dist && yarn build --no-source-maps --public-url /dungeon && gh-pages -d dist"
+    "gh-pages": "rm -rf ./dist && parcel build src/index.html --no-source-maps --public-url /dungeon && gh-pages -d dist"
   },
   "husky": {
     "hooks": {
