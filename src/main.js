@@ -1,6 +1,8 @@
 import { Level } from './level'
 import { keys } from './keys'
 
+const { floor } = Math
+
 const keysDown = { }
 window.addEventListener(
   'keydown',
@@ -66,8 +68,8 @@ function update (elapsed) {
   const player = levels[currentLevel].player
   const cx = player.pos.x + player.size.x / 2
   const cy = player.pos.y + player.size.y / 2
-  camera.x = Math.floor(cx - canvas.width / 2)
-  camera.y = Math.floor(cy - canvas.height / 2)
+  camera.x = floor(cx - canvas.width / 2)
+  camera.y = floor(cy - canvas.height / 2)
 }
 
 function draw () {

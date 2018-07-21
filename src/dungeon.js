@@ -1,12 +1,14 @@
 import { Room } from './room'
 import { tiles } from './tiles'
 
+const { floor, random, min, max } = Math
+
 function randomRange (min, max) {
-  return Math.floor(Math.random() * (max - min) + min)
+  return floor(random() * (max - min) + min)
 }
 
 function randomElement (array) {
-  return array[Math.floor(Math.random() * array.length)]
+  return array[floor(random() * array.length)]
 }
 
 export class Dungeon {
@@ -51,15 +53,17 @@ export class Dungeon {
     this.roomGrid = Array(this.size.y)
     for (let y = 0; y < this.size.y; y++) {
       let row = Array(this.size.x)
-      for (let x = 0; x < this.size.x; x++) { row[x] = [] }
+      for (let x = 0; x < this.size.x; x++) {
+        row[x] = []
+      }
       this.roomGrid[y] = row
     }
 
     // seed the map with a starting randomly sized room in the center of the map
     let room = this.createRandomRoom()
     room.pos = {
-      x: Math.floor(this.size.x / 2) - Math.floor(room.size.x / 2),
-      y: Math.floor(this.size.y / 2) - Math.floor(room.size.y / 2),
+      x: floor(this.size.x / 2) - floor(room.size.x / 2),
+      y: floor(this.size.y / 2) - floor(room.size.y / 2),
     }
     this.addRoom(room)
 
@@ -78,7 +82,7 @@ export class Dungeon {
         // make sure the rooms aren't already connected with a door
         if (!Room.areConnected(this.rooms[i], targets[j])) {
           // 20% chance we add a door connecting the rooms
-          if (Math.random() < 0.2) {
+          if (random < 0.2) {
             this.addDoor(this.findNewDoorLocation(this.rooms[i], targets[j]))
           }
         }
@@ -247,29 +251,29 @@ export class Dungeon {
       // north
       case 0:
         doorPos.x = randomRange(
-          Math.floor(Math.max(room2.pos.x, room1.pos.x) + 1),
-          Math.floor(Math.min(room2.pos.x + room2.size.x, room1.pos.x + room1.size.x) - 1))
+          floor(max(room2.pos.x, room1.pos.x) + 1),
+          floor(min(room2.pos.x + room2.size.x, room1.pos.x + room1.size.x) - 1))
         doorPos.y = room2.pos.y
         break
       // west
       case 1:
         doorPos.x = room2.pos.x
         doorPos.y = randomRange(
-          Math.floor(Math.max(room2.pos.y, room1.pos.y) + 1),
-          Math.floor(Math.min(room2.pos.y + room2.size.y, room1.pos.y + room1.size.y) - 1))
+          floor(max(room2.pos.y, room1.pos.y) + 1),
+          floor(min(room2.pos.y + room2.size.y, room1.pos.y + room1.size.y) - 1))
         break
       // east
       case 2:
         doorPos.x = room1.pos.x
         doorPos.y = randomRange(
-          Math.floor(Math.max(room2.pos.y, room1.pos.y) + 1),
-          Math.floor(Math.min(room2.pos.y + room2.size.y, room1.pos.y + room1.size.y) - 1))
+          floor(max(room2.pos.y, room1.pos.y) + 1),
+          floor(min(room2.pos.y + room2.size.y, room1.pos.y + room1.size.y) - 1))
         break
       // south
       case 3:
         doorPos.x = randomRange(
-          Math.floor(Math.max(room2.pos.x, room1.pos.x) + 1),
-          Math.floor(Math.min(room2.pos.x + room2.size.x, room1.pos.x + room1.size.x) - 1))
+          floor(max(room2.pos.x, room1.pos.x) + 1),
+          floor(min(room2.pos.x + room2.size.x, room1.pos.x + room1.size.x) - 1))
         doorPos.y = room1.pos.y
         break
     }

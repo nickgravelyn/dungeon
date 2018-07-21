@@ -2,6 +2,8 @@ import { Dungeon } from './dungeon'
 import { keys } from './keys'
 import { tiles } from './tiles'
 
+const { floor, abs } = Math
+
 const tileSize = 16
 
 export class Level {
@@ -59,8 +61,8 @@ export class Level {
     this.player.pos = this.moveEntity(this.player.pos, this.player.size, move)
 
     // compute the player's center
-    let cx = Math.floor((this.player.pos.x + this.player.size.x / 2) / tileSize)
-    let cy = Math.floor((this.player.pos.y + this.player.size.y / 2) / tileSize)
+    let cx = floor((this.player.pos.x + this.player.size.x / 2) / tileSize)
+    let cy = floor((this.player.pos.y + this.player.size.y / 2) / tileSize)
 
     // the return value for the destination. -1 means go up a floor, 1 means go down a floor
     let dest = 0
@@ -133,8 +135,8 @@ export class Level {
       }
 
       // get the deltas and steps for both axis
-      let dx = Math.abs(x1 - x0)
-      let dy = Math.abs(y1 - y0)
+      let dx = abs(x1 - x0)
+      let dy = abs(y1 - y0)
       let sx = x0 < x1 ? 1 : -1
       let sy = y0 < y1 ? 1 : -1
 
@@ -168,12 +170,12 @@ export class Level {
 
   draw (canvas, context, camera, visibility) {
     // compute the player's center in tile space for the tile visibility checks
-    let cx = Math.floor((this.player.pos.x + this.player.size.x / 2) / tileSize)
-    let cy = Math.floor((this.player.pos.y + this.player.size.y / 2) / tileSize)
+    let cx = floor((this.player.pos.x + this.player.size.x / 2) / tileSize)
+    let cy = floor((this.player.pos.y + this.player.size.y / 2) / tileSize)
 
     // calculate the base tile coordinates using the camera
-    let baseTileX = Math.floor(camera.x / tileSize) - 1
-    let baseTileY = Math.floor(camera.y / tileSize) - 1
+    let baseTileX = floor(camera.x / tileSize) - 1
+    let baseTileY = floor(camera.y / tileSize) - 1
 
     // calculating the pixel offset based on the camera
     // following http://javascript.about.com/od/problemsolving/a/modulobug.htm to fix negative camera values
@@ -234,10 +236,10 @@ export class Level {
     // draw the player
     context.fillStyle = this.player.color
     context.fillRect(
-      Math.floor(this.player.pos.x - camera.x),
-      Math.floor(this.player.pos.y - camera.y),
-      Math.floor(this.player.size.x),
-      Math.floor(this.player.size.y))
+      floor(this.player.pos.x - camera.x),
+      floor(this.player.pos.y - camera.y),
+      floor(this.player.size.x),
+      floor(this.player.size.y))
   }
 
   moveEntity (pos, size, move) {
@@ -251,10 +253,10 @@ export class Level {
     if (move.x) {
       // calculate the X tile coordinate where we'd like to be
       let offset = (move.x > 0 ? size.x : 0)
-      let x = Math.floor((pos.x + move.x + offset) / tileSize)
+      let x = floor((pos.x + move.x + offset) / tileSize)
 
       // figure out the range of Y tile coordinates that we can collide with
-      let start = Math.floor(pos.y / tileSize)
+      let start = floor(pos.y / tileSize)
       let end = Math.ceil((pos.y + size.y) / tileSize)
 
       // determine whether these tiles are all inside the map
@@ -275,10 +277,10 @@ export class Level {
     if (move.y) {
       // calculate the X tile coordinate where we'd like to be
       let offset = (move.y > 0 ? size.y : 0)
-      let y = Math.floor((pos.y + move.y + offset) / tileSize)
+      let y = floor((pos.y + move.y + offset) / tileSize)
 
       // figure out the range of X tile coordinates that we can collide with
-      let start = Math.floor(endPos.x / tileSize)
+      let start = floor(endPos.x / tileSize)
       let end = Math.ceil((endPos.x + size.x) / tileSize)
 
       // determine whether these tiles are all inside the map
