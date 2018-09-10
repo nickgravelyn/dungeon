@@ -4,4 +4,4 @@ export const keys = Object.freeze({
   up: 38,
   right: 39,
   down: 40,
-})
+});

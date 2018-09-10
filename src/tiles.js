@@ -5,4 +5,4 @@ export const tiles = Object.freeze({
   door: 3,
   stairsUp: 4,
   stairsDown: 5,
-})
+});
