@@ -12,7 +12,6 @@ module.exports = {
   overrides: [
     {
       files: [".eslintrc.js", "prettier.config.js"],
-
       parserOptions: {
         sourceType: "script",
       },
