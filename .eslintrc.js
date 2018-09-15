@@ -8,12 +8,7 @@ module.exports = {
     browser: true,
     es6: true,
   },
-  extends: [
-    "eslint:recommended",
-    "prettier",
-    "plugin:import/errors",
-    "plugin:import/warnings",
-  ],
+  extends: ["eslint:recommended", "prettier", "plugin:import/recommended"],
   overrides: [
     {
       files: [".eslintrc.js", "prettier.config.js"],
