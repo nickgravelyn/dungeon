@@ -1,4 +1,4 @@
-export const tiles = Object.freeze({
+const tiles = Object.freeze({
   blank: 0,
   wall: 1,
   floor: 2,
@@ -6,3 +6,5 @@ export const tiles = Object.freeze({
   stairsUp: 4,
   stairsDown: 5,
 });
+
+export default tiles;

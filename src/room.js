@@ -1,6 +1,6 @@
-import { tiles } from "./tiles";
+import tiles from "./tiles";
 
-export class Room {
+export default class Room {
   constructor(width, height) {
     this.size = { x: width, y: height };
     this.pos = { x: 0, y: 0 };

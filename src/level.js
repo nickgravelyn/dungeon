@@ -1,12 +1,12 @@
-import { Dungeon } from "./dungeon";
-import { keys } from "./keys";
-import { tiles } from "./tiles";
+import Dungeon from "./dungeon";
+import keys from "./keys";
+import tiles from "./tiles";
 
 const { floor, abs } = Math;
 
 const tileSize = 16;
 
-export class Level {
+export default class Level {
   constructor() {
     // create a dungeon
     this.dungeon = new Dungeon(100, 100);

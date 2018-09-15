@@ -1,5 +1,5 @@
-import { Level } from "./level";
-import { keys } from "./keys";
+import Level from "./level";
+import keys from "./keys";
 
 const { floor } = Math;
 

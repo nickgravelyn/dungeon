@@ -1,17 +1,12 @@
-import { Room } from "./room";
-import { tiles } from "./tiles";
+import Room from "./room";
+import tiles from "./tiles";
 
 const { floor, random, min, max } = Math;
 
-function randomRange(min, max) {
-  return floor(random() * (max - min) + min);
-}
+const randomRange = (min, max) => floor(random() * (max - min) + min);
+const randomElement = array => array[floor(random() * array.length)];
 
-function randomElement(array) {
-  return array[floor(random() * array.length)];
-}
-
-export class Dungeon {
+export default class Dungeon {
   constructor(width, height) {
     this.size = { x: width, y: height };
 
