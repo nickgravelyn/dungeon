@@ -13,31 +13,13 @@
     "prettier": "prettier --write * .* **/*",
     "gh-pages": "rimraf ./dist && parcel build src/index.html --no-source-maps --public-url /dungeon && gh-pages -d dist"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "!**.js": [
-      "prettier --write",
-      "git add"
-    ],
-    "**.js": [
-      "prettier --write",
-      "eslint --fix",
-      "git add"
-    ]
-  },
   "devDependencies": {
-    "eslint": "^5.5.0",
-    "eslint-config-prettier": "^3.0.1",
-    "eslint-plugin-import": "^2.14.0",
-    "gh-pages": "^1.2.0",
-    "husky": "^1.0.0-rc.13",
-    "lint-staged": "^7.2.2",
-    "parcel-bundler": "^1.9.7",
-    "prettier": "^1.14.2",
-    "rimraf": "^2.6.2"
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-plugin-import": "^2.17.3",
+    "gh-pages": "^2.0.1",
+    "parcel-bundler": "^1.12.3",
+    "prettier": "^1.18.2",
+    "rimraf": "^2.6.3"
   }
 }
