@@ -80,7 +80,7 @@ export default class Dungeon {
         // make sure the rooms aren't already connected with a door
         if (!Room.areConnected(this.rooms[i], targets[j])) {
           // 20% chance we add a door connecting the rooms
-          if (random < 0.2) {
+          if (random() < 0.2) {
             this.addDoor(this.findNewDoorLocation(this.rooms[i], targets[j]));
           }
         }
