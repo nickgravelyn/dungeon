@@ -32,7 +32,7 @@ export default class Dungeon {
           for (let x = 0; x < r.size.x; x++) {
             if (r.tiles[y][x] === tiles.stairsUp) {
               result.up = { x: r.pos.x + x, y: r.pos.y + y };
-            } else if (r.tiles[y][x] === tiles.stairsUp) {
+            } else if (r.tiles[y][x] === tiles.stairsDown) {
               result.down = { x: r.pos.x + x, y: r.pos.y + y };
             }
           }
